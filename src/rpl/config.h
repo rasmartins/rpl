@@ -20,9 +20,9 @@
 #ifndef RPL_CONFIG_H_INCLUDED_
 #define RPL_CONFIG_H_INCLUDED_
 
-#  include <rpl/os.h>
-#  include <rpl/cc.h>
-#  include <rpl/cpu.h>
-#  include <rpl/libc.h>
+#include <rpl/os.h>
+#include <rpl/cc.h>
+#include <rpl/cpu.h>
+#include <rpl/libc.h>
 
 #endif

@@ -108,9 +108,9 @@
 #  define RPL_CPU_32_BIT     1
 #  define RPL_CPU_BEND       1
 
+/*  Unknown CPU. */
 #else
 #  define RPL_CPU_UNKNOWN    1
-
 #endif
 
 #endif
