@@ -1,3 +1,11 @@
-CFLAGS = -Wall -O2 -I.
+CFLAGS = -Wall -O2 -Isrc
 
-src/rpl/hardware/uart.o: src/rpl/hardware/uart.c src/rpl/hardware/uart.h
+OBJS = src/rpl/threading/mutex.o \
+       src/rpl/threading/thread.o
+
+all: $(OBJS)
+
+%.o: %.c %.h
+
+clean:
+	$(RM) $(OBJS)
