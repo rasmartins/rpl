@@ -15,36 +15,32 @@
  * License along with this library; if not, write to the Free         *
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,        *
  * Boston, MA 02110-1301 USA                                          *
- **********************************************************************
- * This header identifies the C compiler being used.                  *
  **********************************************************************/
 
-#ifndef RPL_CC_H_INCLUDED_
-#define RPL_CC_H_INCLUDED_
+#ifndef RPL_UDP_SOCKET_H_INCLUDED_
+#define RPL_UDP_SOCKET_H_INCLUDED_
 
-/* Intel compiler. */
-#if defined(__INTEL_COMPILER)
-#  define RPL_CC_INTEL
+/* RPL headers. */
+#include <rpl/config.h>
 
-/* Sun Studio/Sun Pro compiler. */
-#elif defined(__SUNPRO_C)
-#  define RPL_CC_SUN
+typedef struct rpl_udp_socket* rpl_udp_socket_t;
 
-/* Clang compiler. */
-#elif defined(__clang__)
-#  define RPL_CC_CLANG
+RPL_SYM rpl_udp_socket_t
+rpl_udp_socket_new(void);
 
-/* GNU Compiler Collection. */
-#elif defined(__GNUC__)
-#  define RPL_CC_GNU
+RPL_SYM void
+rpl_udp_socket_free(rpl_udp_socket_t socket);
 
-/* Microsoft compiler. */
-#elif defined(_MSC_VER)
-#  define RPL_CC_MICROSOFT
+RPL_SYM void
+rpl_udp_socket_open(rpl_udp_socket_t socket);
 
-/* Unknown C compiler. */
-#else
-#  define RPL_CC_UNKNOWN
-#endif
+RPL_SYM void
+rpl_udp_socket_close(rpl_udp_socket_t socket);
+
+RPL_SYM void
+rpl_udp_socket_write(rpl_udp_socket_t socket);
+
+RPL_SYM void
+rpl_udp_socket_read(rpl_udp_socket_t socket);
 
 #endif

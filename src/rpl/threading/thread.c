@@ -15,56 +15,58 @@
  * License along with this library; if not, write to the Free         *
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,        *
  * Boston, MA 02110-1301 USA                                          *
- **********************************************************************
- * This header identifies the C library being used.                   *
  **********************************************************************/
 
-#ifndef RPL_LIBC_H_INCLUDED_
-#define RPL_LIBC_H_INCLUDED_
+// ISO C headers.
+#include <stdlib.h>
 
-/* ISO C headers. */
-#include <stddef.h>
-#include <stdio.h>
+// RPL headers.
+#include <rpl/platform.h>
+#include <rpl/threading/thread.h>
 
-#if defined(__UCLIBC__)
-#  define RPL_LIBC_UCLIBC    1
-
-#elif defined(__GLIBC__)
-#  define RPL_LIBC_GNU       1
-
-#elif defined(_NEWLIB_VERSION)
-#  define RPL_LIBC_NEWLIB    1
-
-#elif defined(__ECOS__)
-#  define RPL_LIBC_ECOS      1
-
-#elif defined(_MINGW32_VERSION)
-#  define RPL_LIBC_MINGW     1
-
-#elif defined(_MSC_VER)
-#  define RPL_LIBC_MICROSOFT 1
-
-#elif defined(__APPLE__)
-#  define RPL_LIBC_APPLE     1
-
-#elif defined(__sun)
-#  define RPL_LIBC_SUN       1
-
-#elif defined(_HAS_DINKUM_CLIB)
-#  define RPL_LIBC_DINKUM    1
-
-#elif defined(__FreeBSD__)   
-#  define RPL_LIBC_FREEBSD   1
-
-#elif defined(__OpenBSD__)   
-#  define RPL_LIBC_OPENBSD   1
-
-#elif defined(__NetBSD__)    
-#  define RPL_LIBC_NETBSD    1
-
-/* Unknown C library. */
-#else
-#  define RPL_LIBC_UNKNOWN   1
+#if defined(RPL_OS_UNIX)
+#  include <pthread.h>
 #endif
 
+struct rpl_thread
+{
+#if defined(RPL_OS_UNIX)
+  pthread_t handle;
 #endif
+};
+
+rpl_thread_t
+rpl_thread_new(void)
+{
+  rpl_thread_t thread = calloc(1, sizeof(struct rpl_thread));
+  
+  return thread;
+}
+
+void
+rpl_thread_free(rpl_thread_t thread)
+{
+  rpl_thread_stop(thread);
+  rpl_thread_join(thread);
+  free(thread);
+}
+
+void
+rpl_thread_start(rpl_thread_t thread, void* function, void* function_arg)
+{
+#if defined(RPL_UNIX)
+  pthread_create(&thread->handle, NULL, function, function_arg);
+#endif
+}
+
+void
+rpl_thread_join(rpl_thread_t thread)
+{
+
+}
+
+void
+rpl_thread_stop(rpl_thread_t thread)
+{
+
+}

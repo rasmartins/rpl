@@ -17,46 +17,66 @@
  * Boston, MA 02110-1301 USA                                          *
  **********************************************************************/
 
-#ifndef RPL_OS_H_INCLUDED_
-#define RPL_OS_H_INCLUDED_
+// ISO C headers.
+#include <stdlib.h>
 
-/* Linux. */
-#if defined(__linux__)
-#  define RPL_OS_LINUX   1
-#  define RPL_OS_UNIX    1
+// RPL headers.
+#include <rpl/platform.h>
+#include <rpl/threading/mutex.h>
 
-/* Microsoft Windows. */
-#elif defined(__WIN32)
-#  define RPL_OS_WINDOWS 1
-
-/* Apple Mac OS X (Darwin). */
-#elif defined(__APPLE__)
-#  define RPL_OS_DARWIN  1
-#  define RPL_OS_UNIX    1
-
-/* FreeBSD. */
-#elif defined(__FreeBSD__)
-#  define RPL_OS_FREEBSD 1
-#  define RPL_OS_UNIX    1
-
-/* OpenBSD. */
-#elif defined(__OpenBSD__)
-#  define RPL_OS_OPENBSD 1
-#  define RPL_OS_UNIX    1
-
-/* NetBSD. */
-#elif defined(__NetBSD__)
-#  define RPL_OS_NETBSD  1
-#  define RPL_OS_UNIX    1
-
-/* QNX Neutrino. */
-#elif defined(__QNXNTO__)
-#  define RPL_OS_QNX6    1
-#  define RPL_OS_UNIX    1
-
-/* Unknown operating system. */
-#else
-#  define RPL_OS_UNKNOWN 1
+#if defined(RPL_OS_UNIX)
+#  include <pthread.h>
 #endif
 
+struct rpl_mutex
+{
+#if defined(RPL_OS_UNIX)
+  pthread_mutex_t handle;
 #endif
+};
+
+rpl_mutex_t
+rpl_mutex_new(void)
+{
+  rpl_mutex_t mutex = calloc(1, sizeof(struct rpl_mutex));
+  
+#if defined(RPL_UNIX)
+  pthread_mutex_init(&mutex->handle, NULL);
+#endif
+
+  return mutex;
+}
+
+void
+rpl_mutex_free(rpl_mutex_t mutex)
+{
+#if defined(RPL_UNIX)
+  pthread_mutex_destroy(&mutex->handle);
+#endif
+  
+  free(mutex);
+}
+
+void
+rpl_mutex_lock(rpl_mutex_t mutex)
+{
+#if defined(RPL_UNIX)
+  pthread_mutex_lock(&mutex->handle);
+#endif
+}
+
+void
+rpl_mutex_try_lock(rpl_mutex_t mutex)
+{
+#if defined(RPL_UNIX)
+  pthread_mutex_trylock(&mutex->handle);
+#endif
+}
+
+void
+rpl_mutex_unlock(rpl_mutex_t mutex)
+{
+#if defined(RPL_UNIX)
+  pthread_mutex_unlock(&mutex->handle);
+#endif
+}
