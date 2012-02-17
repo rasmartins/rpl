@@ -37,6 +37,7 @@ typedef int64_t rpl_int64_t;
 typedef uint64_t rpl_uint64_t;
 
 #elif defined(RPL_OS_WINDOWS)
+#  include <windows.h>
 typedef INT8 rpl_int8_t;
 typedef UINT8 rpl_uint8_t;
 typedef INT16 rpl_int16_t;
@@ -45,4 +46,6 @@ typedef INT32 rpl_int32_t;
 typedef UINT32 rpl_uint32_t;
 typedef INT64 rpl_int64_t;
 typedef UINT64 rpl_uint64_t;
+#endif
+
 #endif

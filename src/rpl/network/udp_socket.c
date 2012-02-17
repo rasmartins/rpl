@@ -22,10 +22,12 @@
 
 /* RPL headers. */
 #include <rpl/platform.h>
-#include <rpl/udp_socket.h>
+#include <rpl/memory/tlsf.h>
+#include <rpl/network/udp_socket.h>
 
 /* Microsoft Windows headers. */
 #if defined(RPL_OS_WINDOWS)
+#  include <windows.h>
 #  include <winsock2.h>
 #  include <ws2tcpip.h>
 #endif
@@ -55,42 +57,44 @@ struct rpl_udp_socket
 rpl_udp_socket_t
 rpl_udp_socket_new(void)
 {
-  rpl_udp_socket_t socket = calloc(sizeof(struct rpl_udp_socket), 1);
-  return socket;
+  rpl_udp_socket_t sock = tlsf_calloc(sizeof(struct rpl_udp_socket), 1);
+  return sock;
 }
 
 void
-rpl_udp_socket_free(rpl_udp_socket_t socket)
+rpl_udp_socket_free(rpl_udp_socket_t sock)
 {
-  free(socket);
+  tlsf_free(sock);
 }
 
 void
-rpl_udp_socket_open(rpl_udp_socket_t socket)
+rpl_udp_socket_open(rpl_udp_socket_t sock)
 {
-  socket->handle = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-  if (socket->handle == INVALID_SOCKET)
+  sock->handle = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+  if (sock->handle == INVALID_SOCKET)
     return;
   
 #if defined(RPL_OS_WINDOWS)
   DWORD t = 0;
   BOOL b = FALSE;
   
-  if (WSAIoctl(socket->handle, SIO_UDP_CONNRESET, &b, sizeof(b), 0, 0, &tmp, 0, 0) == SOCKET_ERROR)
+#  if defined(SIO_UDP_CONNRESET)
+  if (WSAIoctl(sock->handle, SIO_UDP_CONNRESET, &b, sizeof(b), 0, 0, &tmp, 0, 0) == SOCKET_ERROR)
   {
     if (GetLastError() != WSAEOPNOTSUPP)
       return;
   }
+#  endif
 #endif
 }
 
 void
-rpl_udp_socket_close(rpl_udp_socket_t socket)
+rpl_udp_socket_close(rpl_udp_socket_t sock)
 {
 #if defined(RPL_OS_UNIX)
-  close(socket->handle);
+  close(sock->handle);
   
 #elif defined(RPL_OS_WINDOWS)
-  closesocket(socket->handle);
+  closesocket(sock->handle);
 #endif
 }

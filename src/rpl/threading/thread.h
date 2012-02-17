@@ -23,6 +23,7 @@
 #include <rpl/config.h>
 
 typedef struct rpl_thread* rpl_thread_t;
+typedef void (*rpl_thread_function_t)(rpl_thread_t);
 
 RPL_SYM rpl_thread_t
 rpl_thread_new(void);
@@ -31,12 +32,27 @@ RPL_SYM void
 rpl_thread_free(rpl_thread_t thread);
 
 RPL_SYM void
-rpl_thread_start(rpl_thread_t thread, void* function, void* function_arg);
+rpl_thread_set_function(rpl_thread_t thread, rpl_thread_function_t function);
+
+RPL_SYM void
+rpl_thread_set_data(rpl_thread_t thread, void* data);
+
+RPL_SYM void*
+rpl_thread_get_data(const rpl_thread_t thread);
+
+RPL_SYM void
+rpl_thread_start(rpl_thread_t thread);
 
 RPL_SYM void
 rpl_thread_join(rpl_thread_t thread);
 
 RPL_SYM void
 rpl_thread_stop(rpl_thread_t thread);
+
+RPL_SYM int
+rpl_thread_is_stopping(rpl_thread_t thread);
+
+RPL_SYM void
+rpl_thread_stop_and_join(rpl_thread_t thread);
 
 #endif

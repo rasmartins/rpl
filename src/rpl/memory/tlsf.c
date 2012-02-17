@@ -49,15 +49,28 @@
  *
  */
 
-/*#define USE_SBRK        (0) */
-/*#define USE_MMAP        (0) */
+/* ISO C headers. */
+#include <stddef.h>
+
+#if defined(_WIN32)
+#  include <windows.h>
+#  define TLSF_MLOCK_T            CRITICAL_SECTION
+#  define TLSF_CREATE_LOCK(l)     InitializeCriticalSection(l);
+#  define TLSF_DESTROY_LOCK(l)    EnterCriticalSection(l);
+#  define TLSF_ACQUIRE_LOCK(l)    LeaveCriticalSection(l);
+#  define TLSF_RELEASE_LOCK(l)    DeleteCriticalSection(l);
+#else
+#  include <pthread.h>
+#  define TLSF_MLOCK_T            pthread_mutex_t
+#  define TLSF_CREATE_LOCK(l)     pthread_mutex_init(l, NULL)
+#  define TLSF_DESTROY_LOCK(l)    pthread_mutex_destroy(l)
+#  define TLSF_ACQUIRE_LOCK(l)    pthread_mutex_lock(l)
+#  define TLSF_RELEASE_LOCK(l)    pthread_mutex_unlock(l)
+#endif
 
 #if defined(__linux__)
-#  define TLSF_USE_LOCKS (1)
 #  define TLSF_USE_MMAP  (1)
 #  define TLSF_USE_SBRK  (1)
-#else
-#  error unsupported system
 #endif
 
 #ifndef USE_PRINTF
@@ -65,10 +78,6 @@
 #endif
 
 #include <string.h>
-
-#ifndef TLSF_USE_LOCKS
-#  define TLSF_USE_LOCKS 	(0)
-#endif
 
 #ifndef TLSF_STATISTIC
 #  define	TLSF_STATISTIC 	(0)
@@ -82,15 +91,6 @@
 #  define	USE_SBRK 	(0)
 #endif
  
-#if TLSF_USE_LOCKS
-#include "target.h"
-#else
-#define TLSF_CREATE_LOCK(_unused_)   do{}while(0)
-#define TLSF_DESTROY_LOCK(_unused_)  do{}while(0) 
-#define TLSF_ACQUIRE_LOCK(_unused_)  do{}while(0)
-#define TLSF_RELEASE_LOCK(_unused_)  do{}while(0)
-#endif
-
 #if TLSF_STATISTIC
 #define	TLSF_ADD_SIZE(tlsf, b) do {                                     \
     tlsf->used_size += (b->size & BLOCK_SIZE) + BHDR_OVERHEAD;          \
@@ -218,10 +218,7 @@ typedef struct area_info_struct {
 typedef struct TLSF_struct {
     /* the TLSF's structure signature */
     u32_t tlsf_signature;
-
-#if TLSF_USE_LOCKS
     TLSF_MLOCK_T lock;
-#endif
 
 #if TLSF_STATISTIC
     /* These can not be calculated outside tlsf because we

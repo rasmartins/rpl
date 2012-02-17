@@ -33,7 +33,7 @@ rpl_mutex_free(rpl_mutex_t mutex);
 RPL_SYM void
 rpl_mutex_lock(rpl_mutex_t mutex);
 
-RPL_SYM void
+RPL_SYM int
 rpl_mutex_try_lock(rpl_mutex_t mutex);
 
 RPL_SYM void

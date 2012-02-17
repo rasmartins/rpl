@@ -25,6 +25,7 @@
 /* ISO C headers. */
 #include <stdio.h>
 #include <stddef.h>
+#include <stdlib.h>
 
 /* Microsoft Windows headers. */
 #if defined(__WIN32)
@@ -47,7 +48,7 @@
 /** Defined if C library is eCos. */
 #  define RPL_LIBC_ECOS      1
 
-#elif defined(_MINGW32_VERSION)
+#elif defined(__MINGW32_VERSION)
 /** Defined if C library is MinGW. */
 #  define RPL_LIBC_MINGW     1
 
