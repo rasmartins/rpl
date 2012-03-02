@@ -17,42 +17,55 @@
  * Boston, MA 02110-1301 USA                                          *
  **********************************************************************/
 
-#ifndef RPL_THREADING_THREAD_H_INCLUDED_
-#define RPL_THREADING_THREAD_H_INCLUDED_
+#ifndef RPL_CONCURRENCY_MUTEX_H_INCLUDED_
+#define RPL_CONCURRENCY_MUTEX_H_INCLUDED_
 
+/* RPL headers. */
 #include <rpl/config.h>
 
-typedef struct rpl_thread* rpl_thread_t;
-typedef void (*rpl_thread_function_t)(rpl_thread_t);
+/**
+ * @ingroup CONCURRENCY
+ * @{
+ */
 
-RPL_SYM rpl_thread_t
-rpl_thread_new(void);
+/** Mutex object. */
+typedef struct rpl_mutex* rpl_mutex_t;
 
+/**
+ * Create mutex.
+ * @return mutex object.
+ */
+RPL_SYM rpl_mutex_t
+rpl_mutex_new(void);
+
+/**
+ * Free mutex.
+ * @param mutex object.
+ */
 RPL_SYM void
-rpl_thread_free(rpl_thread_t thread);
+rpl_mutex_free(rpl_mutex_t* mutex);
 
+/**
+ * Lock mutex.
+ * @param mutex object.
+ */
 RPL_SYM void
-rpl_thread_set_function(rpl_thread_t thread, rpl_thread_function_t function);
+rpl_mutex_lock(rpl_mutex_t mutex);
 
-RPL_SYM void
-rpl_thread_set_data(rpl_thread_t thread, void* data);
-
-RPL_SYM void*
-rpl_thread_get_data(const rpl_thread_t thread);
-
-RPL_SYM void
-rpl_thread_start(rpl_thread_t thread);
-
-RPL_SYM void
-rpl_thread_join(rpl_thread_t thread);
-
-RPL_SYM void
-rpl_thread_stop(rpl_thread_t thread);
-
+/**
+ * Try to lock mutex.
+ * @param mutex object.
+ */
 RPL_SYM int
-rpl_thread_is_stopping(rpl_thread_t thread);
+rpl_mutex_try_lock(rpl_mutex_t mutex);
 
+/**
+ * Unlock mutex.
+ * @param mutex object.
+ */
 RPL_SYM void
-rpl_thread_stop_and_join(rpl_thread_t thread);
+rpl_mutex_unlock(rpl_mutex_t mutex);
+
+/** @} */
 
 #endif

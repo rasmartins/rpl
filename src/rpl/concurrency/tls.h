@@ -1,5 +1,5 @@
-#ifndef RPL_THREADING_TLS_KEY_H_INCLUDED_
-#define RPL_THREADING_TLS_KEY_H_INCLUDED_
+#ifndef RPL_CONCURRENCY_TLS_KEY_H_INCLUDED_
+#define RPL_CONCURRENCY_TLS_KEY_H_INCLUDED_
 
 /* RPL headers. */
 #include <rpl/platform.h>

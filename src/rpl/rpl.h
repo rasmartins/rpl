@@ -11,7 +11,7 @@
 /**
  * @defgroup CONCURRENCY Concurrency
  */
-#include <rpl/threading/thread.h>
+#include <rpl/concurrency/thread.h>
 
 #include <rpl/time/clock.h>
 #include <rpl/time/delay.h>

@@ -22,7 +22,7 @@
 
 /* RPL headers. */
 #include <rpl/platform.h>
-#include <rpl/threading/mutex.h>
+#include <rpl/concurrency/mutex.h>
 
 #if defined(RPL_OS_UNIX)
 #  include <pthread.h>
