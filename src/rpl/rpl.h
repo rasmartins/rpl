@@ -8,6 +8,9 @@
 #include <rpl/network/udp_socket.h>
 #include <rpl/network/tcp_socket.h>
 
+/**
+ * @defgroup CONCURRENCY Concurrency
+ */
 #include <rpl/threading/thread.h>
 
 #include <rpl/time/clock.h>

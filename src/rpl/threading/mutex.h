@@ -20,23 +20,52 @@
 #ifndef RPL_THREADING_MUTEX_H_INCLUDED_
 #define RPL_THREADING_MUTEX_H_INCLUDED_
 
+/* RPL headers. */
 #include <rpl/config.h>
 
+/**
+ * @ingroup CONCURRENCY
+ * @{
+ */
+
+/** Mutex object. */
 typedef struct rpl_mutex* rpl_mutex_t;
 
+/**
+ * Create mutex.
+ * @return mutex object.
+ */
 RPL_SYM rpl_mutex_t
 rpl_mutex_new(void);
 
+/**
+ * Free mutex.
+ * @param mutex object.
+ */
 RPL_SYM void
-rpl_mutex_free(rpl_mutex_t mutex);
+rpl_mutex_free(rpl_mutex_t* mutex);
 
+/**
+ * Lock mutex.
+ * @param mutex object.
+ */
 RPL_SYM void
 rpl_mutex_lock(rpl_mutex_t mutex);
 
+/**
+ * Try to lock mutex.
+ * @param mutex object.
+ */
 RPL_SYM int
 rpl_mutex_try_lock(rpl_mutex_t mutex);
 
+/**
+ * Unlock mutex.
+ * @param mutex object.
+ */
 RPL_SYM void
 rpl_mutex_unlock(rpl_mutex_t mutex);
+
+/** @} */
 
 #endif
