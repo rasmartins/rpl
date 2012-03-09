@@ -3,8 +3,8 @@ include(Toolchain.cmake)
 
 project("RPL")
 
-#set(LIBS pthread rt)
-set(LIBS ws2_32)
+set(LIBS pthread rt)
+#set(LIBS ws2_32)
 
 include_directories(src)
 file(GLOB_RECURSE RPL_SRCS src/*.c)
@@ -21,3 +21,6 @@ target_link_libraries(test_thread rpl ${LIBS})
 
 add_executable(test_time_clock test/test_time_clock.c)
 target_link_libraries(test_time_clock rpl ${LIBS})
+
+add_executable(test_uart test/test_uart.c)
+target_link_libraries(test_uart rpl ${LIBS})
