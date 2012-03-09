@@ -22,6 +22,7 @@
 
 /* RPL headers. */
 #include <rpl/config.h>
+#include <rpl/integers.h>
 
 typedef struct rpl_address* rpl_address_t;
 
@@ -32,15 +33,32 @@ void
 rpl_address_free(rpl_address_t address);
 
 void
-rpl_address_set_port(rpl_address_t address, unsigned port);
+rpl_address_set_port(rpl_address_t address, short port);
 
-unsigned
+short
 rpl_address_get_port(const rpl_address_t address);
+
+void
+rpl_address_set_addr(rpl_address_t address, rpl_uint32_t addr);
+
+void
+rpl_address_set_addr_ho(rpl_address_t address, rpl_uint32_t addr);
+
+rpl_uint32_t
+rpl_address_get_addr(const rpl_address_t address);
+
+rpl_uint32_t
+rpl_address_get_addr_ho(const rpl_address_t address);
 
 void
 rpl_address_set_host(rpl_address_t address, const char* host);
 
 const char*
 rpl_address_get_host(const rpl_address_t address);
+
+int
+rpl_address_resolve(rpl_address_t address);
+
+
 
 #endif
