@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301 USA                                          *
  **********************************************************************/
 
-#ifndef RPL_THREADING_THREAD_H_INCLUDED_
-#define RPL_THREADING_THREAD_H_INCLUDED_
+#ifndef RPL_CONCURRENCY_THREAD_H_INCLUDED_
+#define RPL_CONCURRENCY_THREAD_H_INCLUDED_
 
 #include <rpl/config.h>
 

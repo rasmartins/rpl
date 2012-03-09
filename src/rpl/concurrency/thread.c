@@ -23,8 +23,8 @@
 /* RPL headers. */
 #include <rpl/platform.h>
 #include <rpl/error.h>
-#include <rpl/threading/mutex.h>
-#include <rpl/threading/thread.h>
+#include <rpl/concurrency/mutex.h>
+#include <rpl/concurrency/thread.h>
 
 /* Platform specific headers. */
 #if defined(RPL_OS_UNIX)

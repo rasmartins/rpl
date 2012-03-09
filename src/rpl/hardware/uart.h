@@ -21,59 +21,117 @@
 #ifndef RPL_UART_H_INCLUDED_
 #define RPL_UART_H_INCLUDED_
 
+/**
+ * Opaque object representing a UART device.
+ */
 typedef struct rpl_uart* rpl_uart_t;
 
 typedef enum
 {
+  /** 7 data bits, 1 stop bit, odd parity. */
   RPL_UART_FRAME_7O1,
+  /** 7 data bits, 1 stop bit, even parity. */
   RPL_UART_FRAME_7E1,
+  /** 8 data bits, 1 stop bit, no parity. */
   RPL_UART_FRAME_8N1
 } rpl_uart_frame_t;
 
 typedef enum
 {
+  /** No flow control. */
   RPL_UART_FCTL_NONE,
+  /** XON/XOFF (software) flow control. */
   RPL_UART_FCTL_XONXOFF,
+  /** CTS/RTS (hardware) flow control. */
   RPL_UART_FCTL_CTSRTS
 } rpl_uart_fctl_t;
 
+/**
+ * Create UART object.
+ * @return UART object.
+ */
 rpl_uart_t
 rpl_uart_new(void);
 
+/**
+ * Free UART object.
+ * @param uart UART object.
+ */
 void
-rpl_uart_free(rpl_uart_t* rpl_uart);
+rpl_uart_free(rpl_uart_t* uart);
+
+/**
+ * Open UART device.
+ * @param uart UART object.
+ * @param dev device name.
+ */
+void
+rpl_uart_open(rpl_uart_t uart, const char* dev);
+
+/**
+ * Close UART device.
+ * @param uart UART object.
+ */
+void
+rpl_uart_close(rpl_uart_t uart);
+
+/**
+ * Set UART frame type.
+ * @param uart UART object.
+ * @param type frame type.
+ */
+void
+rpl_uart_set_frame_type(rpl_uart_t uart, rpl_uart_frame_t type);
+
+/**
+ * Set UART flow control.
+ * @param uart UART object.
+ * @param fctl flow control type.
+ */
+void
+rpl_uart_set_flow_control(rpl_uart_t uart, rpl_uart_fctl_t fctl);
+
+/**
+ * Set UART baud rate.
+ * @param uart UART object.
+ * @param baud baud rate.
+ */
+void
+rpl_uart_set_baud_rate(rpl_uart_t uart, unsigned baud);
+
+/**
+ * Write data to UART.
+ * @param uart UART object.
+ * @param data data to write.
+ * @param data_size amount of bytes.
+ */
+void
+rpl_uart_write(rpl_uart_t uart, const char* data, unsigned data_size);
+
+/**
+ * Read data from UART.
+ * @param uart UART object.
+ * @param data data to write.
+ * @param data_size amount of bytes.
+ */
+void
+rpl_uart_read(rpl_uart_t uart, char* data, unsigned data_size);
+
+/**
+ * Send break.
+ * @param uart UART object.
+ * @param duration break duration.
+ */
+void
+rpl_uart_send_break(rpl_uart_t uart, unsigned duration);
 
 void
-rpl_uart_open(rpl_uart_t rpl_uart, const char* dev);
+rpl_uart_flush(rpl_uart_t uart);
 
 void
-rpl_uart_close(rpl_uart_t rpl_uart);
+rpl_uart_flush_input(rpl_uart_t uart);
 
 void
-rpl_uart_set_frame_type(rpl_uart_t rpl_uart, rpl_uart_frame_t type);
-
-void
-rpl_uart_set_flow_control(rpl_uart_t rpl_uart, rpl_uart_fctl_t fctl);
-
-void
-rpl_uart_set_baud_rate(rpl_uart_t rpl_uart, unsigned baud);
-
-void
-rpl_uart_write(rpl_uart_t rpl_uart, const char* data, unsigned data_size);
-
-void
-rpl_uart_read(rpl_uart_t rpl_uart, char* data, unsigned data_size);
-
-void
-rpl_uart_send_break(rpl_uart_t rpl_uart, unsigned duration);
-
-void
-rpl_uart_flush(rpl_uart_t rpl_uart);
-
-void
-rpl_uart_flush_input(rpl_uart_t rpl_uart);
-
-void
-rpl_uart_flush_output(rpl_uart_t rpl_uart);
+rpl_uart_flush_output(rpl_uart_t uart);
 
 #endif

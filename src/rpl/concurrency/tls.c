@@ -1,6 +1,6 @@
 #include <rpl/platform.h>
 #include <rpl/memory/tlsf.h>
-#include <rpl/threading/tls.h>
+#include <rpl/concurrency/tls.h>
 
 #if defined(RPL_OS_WINDOWS)
 #  include <windows.h>

@@ -8,7 +8,10 @@
 #include <rpl/network/udp_socket.h>
 #include <rpl/network/tcp_socket.h>
 
-#include <rpl/threading/thread.h>
+/**
+ * @defgroup CONCURRENCY Concurrency
+ */
+#include <rpl/concurrency/thread.h>
 
 #include <rpl/time/clock.h>
 #include <rpl/time/delay.h>
