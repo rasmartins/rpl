@@ -127,7 +127,7 @@ rpl_thread_free(rpl_thread_t thread)
 
   rpl_thread_stop(thread);
   rpl_thread_join(thread);
-  rpl_mutex_free(thread->state_lock);
+  rpl_mutex_free(&thread->state_lock);
   free(thread);
 }
 

@@ -1,7 +1,7 @@
 #ifndef RPL_ERROR_H_INCLUDED_
 #define RPL_ERROR_H_INCLUDED_
 
-#include <rpl/threading/tls.h>
+#include <rpl/concurrency/tls.h>
 
 extern rpl_tls_key_t rpl_error_key;
 
