@@ -21,7 +21,7 @@
 #define RPL_TIME_DELAY_H_INCLUDED_
 
 /* RPL headers. */
-#include <rpl/integers.h>
+#include <rpl/types.h>
 
 void
 rpl_delay(unsigned seconds);

@@ -22,7 +22,7 @@
 
 /* RPL headers. */
 #include <rpl/config.h>
-#include <rpl/integers.h>
+#include <rpl/types.h>
 
 typedef struct rpl_address* rpl_address_t;
 

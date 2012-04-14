@@ -22,7 +22,7 @@
 
 #include <rpl/config.h>
 #include <rpl/platform.h>
-#include <rpl/integers.h>
+#include <rpl/types.h>
 
 #include <rpl/network/udp_socket.h>
 #include <rpl/network/tcp_socket.h>
