@@ -21,7 +21,7 @@
 #define RPL_TYPES_H_INCLUDED_
 
 /**
- * @defgroup INTEGERS Integers
+ * @defgroup BASIC_TYPES Basic Types
  * @{
  */
 
