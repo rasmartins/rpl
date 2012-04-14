@@ -1,7 +1,6 @@
 /**********************************************************************
- * one line to give the library's name and an idea of what it does.   *
  * Copyright (C) 2012 Ricardo Martins                                 *
- *                                                                    *
+ **********************************************************************
  * This library is free software; you can redistribute it and/or      *
  * modify it under the terms of the GNU Lesser General Public License *
  * as published by the Free Software Foundation; either version 2.1   *
@@ -47,7 +46,7 @@ typedef enum
 } rpl_uart_fctl_t;
 
 /**
- * Create UART object.
+ * Create a new UART object.
  * @return UART object.
  */
 rpl_uart_t
@@ -59,6 +58,15 @@ rpl_uart_new(void);
  */
 void
 rpl_uart_free(rpl_uart_t* uart);
+
+/**
+ * Set UART device to use.
+ * @param uart UART object.
+ * @param dev device name.
+ */
+void
+rpl_uart_set_device(rpl_uart_t uart, const char* dev);
+
 
 /**
  * Open UART device.

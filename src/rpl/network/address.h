@@ -26,39 +26,138 @@
 
 typedef struct rpl_address* rpl_address_t;
 
+/**
+ * Create network address object.
+ * @return network address object.
+ */
 rpl_address_t
 rpl_address_new(void);
 
+/**
+ * Free a previously allocated network address object.
+ * @param address network address object.
+ */
 void
-rpl_address_free(rpl_address_t address);
+rpl_address_free(rpl_address_t* address);
 
+/**
+ * Set port.
+ * @param address network address object.
+ * @param port port.
+ */
 void
 rpl_address_set_port(rpl_address_t address, short port);
 
+/**
+ * Get port.
+ * @param address network address object.
+ * @return port.
+ */
 short
 rpl_address_get_port(const rpl_address_t address);
 
+/**
+ * Set IPv4 address.
+ * @param address network address object.
+ * @param addr IPv4 address in network byte order.
+ */
 void
-rpl_address_set_addr(rpl_address_t address, rpl_uint32_t addr);
+rpl_address_set_addr4(rpl_address_t address, rpl_uint32_t addr);
 
+/**
+ * Set IPv4 address.
+ * @param address network address object.
+ * @param addr IPv4 address in host byte order.
+ */
 void
-rpl_address_set_addr_ho(rpl_address_t address, rpl_uint32_t addr);
+rpl_address_set_addr4_ho(rpl_address_t address, rpl_uint32_t addr);
 
+/**
+ * Get IPv4 address.
+ * @param address network address object.
+ * @return IPv4 address in network byte order.
+ */
 rpl_uint32_t
-rpl_address_get_addr(const rpl_address_t address);
+rpl_address_get_addr4(const rpl_address_t address);
 
+/**
+ * Get IPv4 address.
+ * @param address network address object.
+ * @return IPv4 address in network byte order.
+ */
 rpl_uint32_t
-rpl_address_get_addr_ho(const rpl_address_t address);
+rpl_address_get_addr4(const rpl_address_t address);
 
+/**
+ * Get IPv4 address.
+ * @param address network address object.
+ * @return IPv4 address in host byte order.
+ */
+rpl_uint32_t
+rpl_address_get_addr4_ho(const rpl_address_t address);
+
+/**
+ * Set IPv6 address.
+ * @param address network address object.
+ * @param addr IPv6 address in network byte order.
+ */
+void
+rpl_address_set_addr6(rpl_address_t address, rpl_uint64_t addr);
+
+/**
+ * Set IPv6 address.
+ * @param address network address object.
+ * @param addr IPv6 address in host byte order.
+ */
+void
+rpl_address_set_addr6_ho(rpl_address_t address, rpl_uint64_t addr);
+
+/**
+ * Get IPv6 address.
+ * @param address network address object.
+ * @return IPv6 address in network byte order.
+ */
+rpl_uint64_t
+rpl_address_get_addr6(const rpl_address_t address);
+
+/**
+ * Get IPv6 address.
+ * @param address network address object.
+ * @return IPv6 address in network byte order.
+ */
+rpl_uint64_t
+rpl_address_get_addr6(const rpl_address_t address);
+
+/**
+ * Get IPv6 address.
+ * @param address network address object.
+ * @return IPv6 address in host byte order.
+ */
+rpl_uint64_t
+rpl_address_get_addr6_ho(const rpl_address_t address);
+
+/**
+ * Set address by name.
+ * @param address network address object.
+ * @param host name.
+ */
 void
 rpl_address_set_host(rpl_address_t address, const char* host);
 
+/**
+ * Get address by name.
+ * @param address network address object.
+ * @param host name.
+ */
 const char*
 rpl_address_get_host(const rpl_address_t address);
 
+/**
+ * Resolve address by name.
+ * @param address network address object.
+ * @param host name.
+ */
 int
 rpl_address_resolve(rpl_address_t address);
-
-
 
 #endif
