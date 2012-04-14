@@ -45,7 +45,7 @@ rpl_mutex_t
 rpl_mutex_new(void)
 {
   rpl_mutex_t mutex = calloc(1, sizeof(struct rpl_mutex));
-  
+
 #if defined(RPL_OS_UNIX)
   pthread_mutex_init(&mutex->handle, NULL);
 
@@ -63,9 +63,9 @@ rpl_mutex_free(rpl_mutex_t* mutex)
   pthread_mutex_destroy(&((*mutex)->handle));
 
 #elif defined(RPL_OS_WINDOWS)
-  DeleteCriticalSection(&((*mutex->handle)));
+  DeleteCriticalSection(&((*mutex)->handle));
 #endif
-  
+
   free(*mutex);
   *mutex = NULL;
 }

@@ -260,4 +260,32 @@
 #  define RPL_CPU_UNKNOWN    1
 #endif
 
+/**
+ * Retrieve operating system name.
+ * @return operating system name.
+ */
+const char*
+rpl_os_get_name(void);
+
+/**
+ * Retrieve CPU name.
+ * @return CPU name.
+ */
+const char*
+rpl_cpu_get_name(void);
+
+/**
+ * Retrieve C library's name.
+ * @return C library's name.
+ */
+const char*
+rpl_libc_get_name(void);
+
+/**
+ * Retrieve C compiler's name.
+ * @return C compiler's name.
+ */
+const char*
+rpl_cc_get_name(void);
+
 #endif

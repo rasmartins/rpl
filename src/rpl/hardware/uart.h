@@ -69,7 +69,6 @@ rpl_uart_free(rpl_uart_t* uart);
 void
 rpl_uart_set_device(rpl_uart_t uart, const char* dev);
 
-
 /**
  * Open UART device.
  * @param uart UART object.

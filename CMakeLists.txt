@@ -19,6 +19,9 @@ endif()
 file(GLOB_RECURSE RPL_SRCS src/*.c)
 add_library(rpl ${RPL_SRCS})
 
+add_executable(test_platform test/test_platform.c)
+target_link_libraries(test_platform rpl ${RPL_LIBS})
+
 add_executable(test_udp_socket test/test_udp_socket.c)
 target_link_libraries(test_udp_socket rpl ${RPL_LIBS})
 

@@ -60,8 +60,8 @@ rpl_udp_set_mcast_ttl(rpl_udp_socket_t socket, rpl_uint8_t ttl);
 RPL_SYM void
 rpl_udp_set_mcast_loop(rpl_udp_socket_t socket, rpl_bool_t loop);
 
-RPL_SYM void
-rpl_udp_set_mcast_join(rpl_udp_socket_t socket, rpl_address_t group, rpl_address_t interface);
+/* RPL_SYM void */
+/* rpl_udp_set_mcast_join(rpl_udp_socket_t socket, rpl_address_t group, rpl_address_t interface); */
 
 RPL_SYM void
 rpl_udp_bind(rpl_udp_socket_t socket, rpl_address_t address);

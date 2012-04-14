@@ -17,45 +17,65 @@
  * Boston, MA 02110-1301 USA                                          *
  **********************************************************************/
 
-#ifndef RPL_TIME_CLOCK_H_INCLUDED_
-#define RPL_TIME_CLOCK_H_INCLUDED_
-
 /* RPL headers. */
-#include <rpl/types.h>
+#include <rpl/platform.h>
 
-/**
- * Retrieve the number of seconds elapsed since the Unix Epoch.
- * @return number of seconds since the Unix Epoch.
- */
-rpl_uint64_t
-rpl_clock_get(void);
-
-/**
- * Retrieve the number of seconds elapsed since the Unix Epoch.
- * @return number of seconds since the Unix Epoch.
- */
-rpl_uint64_t
-rpl_clock_get_monotonic(void);
-
-/**
- * Retrieve the number of milliseconds elapsed since the Unix Epoch.
- * @return number of milliseconds since the Unix Epoch.
- */
-rpl_uint64_t
-rpl_clock_get_msec(void);
-
-/**
- * Retrieve the number of microseconds elapsed since the Unix Epoch.
- * @return number of microseconds since the Unix Epoch.
- */
-rpl_uint64_t
-rpl_clock_get_usec(void);
-
-/**
- * Retrieve the number of nanoseconds elapsed since the Unix Epoch.
- * @return number of nanoseconds since the Unix Epoch.
- */
-rpl_uint64_t
-rpl_clock_get_nsec(void);
-
+const char*
+rpl_os_get_name(void)
+{
+  return
+#if defined(RPL_OS_LINUX)
+  "linux";
+#elif defined(RPL_OS_WINDOWS)
+  "windows";
+#elif defined(RPL_OS_QNX6)
+  "qnx6";
+#else
+  "unknown";
 #endif
+}
+
+const char*
+rpl_cpu_get_name(void)
+{
+  return
+#if defined(RPL_CPU_X86)
+  "x86"
+#elif defined(RPL_CPU_ARM)
+  "arm"
+#else
+  "unknown"
+#endif
+
+  "-"
+
+#if defined(RPL_CPU_32_BIT)
+  "32";
+#elif defined(RPL_CPU_64_BIT)
+  "64";
+#endif
+}
+
+const char*
+rpl_libc_get_name(void)
+{
+  return
+#if defined(RPL_LIBC_GNU)
+  "glibc";
+#elif defined(RPL_LIBC_MINGW)
+  "mingw";
+#else
+  "unknown";
+#endif
+}
+
+const char*
+rpl_cc_get_name(void)
+{
+  return
+#if defined(RPL_CC_GNU)
+  "gcc";
+#else
+  "unknown";
+#endif
+}
