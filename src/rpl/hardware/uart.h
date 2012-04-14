@@ -25,6 +25,7 @@
  */
 typedef struct rpl_uart* rpl_uart_t;
 
+/** Frame type. */
 typedef enum
 {
   /** 7 data bits, 1 stop bit, odd parity. */
@@ -35,6 +36,7 @@ typedef enum
   RPL_UART_FRAME_8N1
 } rpl_uart_frame_t;
 
+/** Flow-control type.*/
 typedef enum
 {
   /** No flow control. */
