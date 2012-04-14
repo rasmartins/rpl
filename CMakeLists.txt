@@ -1,29 +1,38 @@
 cmake_minimum_required(VERSION 2.8)
 include(Toolchain.cmake)
+include(CheckSymbolExists)
 
 project("RPL")
 
-set(LIBS pthread rt)
-#set(LIBS ws2_32)
-
 include_directories(src)
+
+set(CMAKE_REQUIRED_INCLUDES ${PROJECT_SOURCE_DIR}/src)
+check_symbol_exists(RPL_OS_LINUX "rpl/platform.h" RPL_OS_LINUX)
+check_symbol_exists(RPL_OS_WINDOWS "rpl/platform.h" RPL_OS_WINDOWS)
+
+if (RPL_OS_LINUX)
+  set(RPL_LIBS pthread rt)
+elseif(RPL_OS_WINDOWS)
+  set(RPL_LIBS ws2_32)
+endif()
+
 file(GLOB_RECURSE RPL_SRCS src/*.c)
 add_library(rpl ${RPL_SRCS})
 
 add_executable(test_udp_socket test/test_udp_socket.c)
-target_link_libraries(test_udp_socket rpl ${LIBS})
+target_link_libraries(test_udp_socket rpl ${RPL_LIBS})
 
 add_executable(test_tcp_socket test/test_tcp_socket.c)
-target_link_libraries(test_tcp_socket rpl ${LIBS})
+target_link_libraries(test_tcp_socket rpl ${RPL_LIBS})
 
 add_executable(test_address test/test_address.c)
-target_link_libraries(test_address rpl ${LIBS})
+target_link_libraries(test_address rpl ${RPL_LIBS})
 
 add_executable(test_thread test/test_thread.c)
-target_link_libraries(test_thread rpl ${LIBS})
+target_link_libraries(test_thread rpl ${RPL_LIBS})
 
 add_executable(test_time_clock test/test_time_clock.c)
-target_link_libraries(test_time_clock rpl ${LIBS})
+target_link_libraries(test_time_clock rpl ${RPL_LIBS})
 
 add_executable(test_uart test/test_uart.c)
-target_link_libraries(test_uart rpl ${LIBS})
+target_link_libraries(test_uart rpl ${RPL_LIBS})

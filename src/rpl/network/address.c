@@ -19,6 +19,7 @@
 
 /* ISO C headers. */
 #include <string.h>
+#include <assert.h>
 
 /* RPL headers. */
 #include <rpl/memory/tlsf.h>
@@ -53,15 +54,15 @@ translate_address(rpl_address_t address, int resolve)
   struct addrinfo* res = NULL;
   struct addrinfo* itr = NULL;
   struct addrinfo hints;
-  
+
   memset(&hints, 0, sizeof(struct addrinfo));
   hints.ai_flags = AI_CANONNAME | ((resolve) ? 0 : AI_NUMERICHOST);
   hints.ai_family = AF_INET;
-  
+
   int rv = getaddrinfo(address->host, NULL, &hints, &res);
   if (rv != 0)
     return 0;
-  
+
   for (itr = res; itr; itr = itr->ai_next)
   {
     struct sockaddr_in* in = (struct sockaddr_in*)itr->ai_addr;
@@ -71,7 +72,7 @@ translate_address(rpl_address_t address, int resolve)
     return 1;
   }
 #endif
-  
+
   return 0;
 }
 
@@ -83,11 +84,15 @@ rpl_address_new(void)
 }
 
 void
-rpl_address_free(rpl_address_t address)
+rpl_address_free(rpl_address_t* address)
 {
-  if (address->host != NULL)
-    tlsf_free(address->host);
-  tlsf_free(address);
+  assert(address != NULL);
+  assert(*address != NULL);
+
+  if ((*address)->host != NULL)
+    tlsf_free((*address)->host);
+  tlsf_free(*address);
+  *address = NULL;
 }
 
 void

@@ -22,6 +22,8 @@
 
 /* RPL headers. */
 #include <rpl/config.h>
+#include <rpl/types.h>
+#include <rpl/network/address.h>
 
 /**
  * UDP socket object.

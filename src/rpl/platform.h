@@ -68,19 +68,19 @@
 /** Defined if C library is Dinkum. */
 #  define RPL_LIBC_DINKUM    1
 
-#elif defined(__FreeBSD__)   
+#elif defined(__FreeBSD__)
 /** Defined if C library is FreeBSD. */
 #  define RPL_LIBC_FREEBSD   1
 
-#elif defined(__OpenBSD__)   
+#elif defined(__OpenBSD__)
 /** Defined if C library is OpenBSD. */
 #  define RPL_LIBC_OPENBSD   1
 
-#elif defined(__NetBSD__)    
+#elif defined(__NetBSD__)
 /** Defined if C library is NetBSD. */
 #  define RPL_LIBC_NETBSD    1
 
-#elif defined(__DragonFly__)    
+#elif defined(__DragonFly__)
 /** Defined if C library is DragonFly. */
 #  define RPL_LIBC_DRAGONFLY 1
 
@@ -146,7 +146,7 @@
 #  define RPL_OS_UNIX        1
 #  define RPL_OS_BSD         1
 
-#elif defined(__DragonFly__)    
+#elif defined(__DragonFly__)
 /** Defined if operating system is DragonFly BSD. */
 #  define RPL_OS_DRAGONFLY   1
 #  define RPL_OS_UNIX        1
@@ -188,64 +188,64 @@
 
 #elif defined(__ARM_ARCH_4T__)
 /** Defined if CPU is ARM v4. */
-#  define RPL_CPU_ARM        1 
+#  define RPL_CPU_ARM        1
 #  define RPL_CPU_ARM4T      1
 #  define RPL_CPU_32_BIT     1
 #  define RPL_CPU_LEND       1
 
 #elif defined(__ARM_ARCH_5T__)
 /** Defined if CPU is ARM v5. */
-#  define RPL_CPU_ARM        1 
+#  define RPL_CPU_ARM        1
 #  define RPL_CPU_ARM5T      1
 #  define RPL_CPU_32_BIT     1
 #  define RPL_CPU_LEND       1
 
 #elif defined(__ARM_ARCH_7A__)
 /** Defined if CPU is ARM v7. */
-#  define RPL_CPU_ARM        1 
+#  define RPL_CPU_ARM        1
 #  define RPL_CPU_ARM7A      1
 #  define RPL_CPU_32_BIT     1
 #  define RPL_CPU_LEND       1
 
 #elif defined(__arm__)
 /** Defined if CPU is generic ARM. */
-#  define RPL_CPU_ARM        1 
+#  define RPL_CPU_ARM        1
 #  define RPL_CPU_32_BIT     1
 #  define RPL_CPU_LEND       1
 
 #elif defined(__sparcv9__)
 /** Defined if CPU is SPARC v9. */
-#  define RPL_CPU_SPARC      1 
+#  define RPL_CPU_SPARC      1
 #  define RPL_CPU_64_BIT     1
 #  define RPL_CPU_BEND       1
 
 #elif defined(__sparcv8__)
 /** Defined if CPU is SPARC v8. */
-#  define RPL_CPU_SPARC      1 
+#  define RPL_CPU_SPARC      1
 #  define RPL_CPU_32_BIT     1
 #  define RPL_CPU_BEND       1
 
 #elif defined(__sparc__)
 /** Defined if CPU is SPARC. */
-#  define RPL_CPU_SPARC      1 
+#  define RPL_CPU_SPARC      1
 #  define RPL_CPU_32_BIT     1
 #  define RPL_CPU_BEND       1
 
 #elif defined(__MIPSEL__)
 /** Defined if CPU is MIPS. */
-#  define RPL_CPU_MIPS       1 
+#  define RPL_CPU_MIPS       1
 #  define RPL_CPU_32_BIT     1
 #  define RPL_CPU_LEND       1
 
 #elif defined(__MIPSEB__)
 /** Defined if CPU is MIPS. */
-#  define RPL_CPU_MIPS       1 
+#  define RPL_CPU_MIPS       1
 #  define RPL_CPU_32_BIT     1
 #  define RPL_CPU_BEND       1
 
 #elif defined(__avr32__)
 /** Defined if CPU is AVR32. */
-#  define RPL_CPU_AVR32      1 
+#  define RPL_CPU_AVR32      1
 #  define RPL_CPU_32_BIT     1
 #  define RPL_CPU_BEND       1
 
