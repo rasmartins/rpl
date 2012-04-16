@@ -21,7 +21,7 @@
 #define RPL_CONCURRENCY_MUTEX_H_INCLUDED_
 
 /* RPL headers. */
-#include <rpl/config.h>
+#include <rpl/platform.h>
 
 /**
  * @ingroup CONCURRENCY

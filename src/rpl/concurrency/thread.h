@@ -20,7 +20,8 @@
 #ifndef RPL_CONCURRENCY_THREAD_H_INCLUDED_
 #define RPL_CONCURRENCY_THREAD_H_INCLUDED_
 
-#include <rpl/config.h>
+/* RPL headers. */
+#include <rpl/platform.h>
 
 typedef struct rpl_thread* rpl_thread_t;
 typedef void (*rpl_thread_function_t)(rpl_thread_t);

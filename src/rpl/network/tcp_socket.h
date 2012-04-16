@@ -21,7 +21,7 @@
 #define RPL_TCP_SOCKET_H_INCLUDED_
 
 /* RPL headers. */
-#include <rpl/config.h>
+#include <rpl/platform.h>
 #include <rpl/network/address.h>
 
 enum rpl_tcp_socket_options

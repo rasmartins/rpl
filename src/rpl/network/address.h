@@ -21,7 +21,7 @@
 #define RPL_ADDRESS_H_INCLUDED_
 
 /* RPL headers. */
-#include <rpl/config.h>
+#include <rpl/platform.h>
 #include <rpl/types.h>
 
 typedef struct rpl_address* rpl_address_t;

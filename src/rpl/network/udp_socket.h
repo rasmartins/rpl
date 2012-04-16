@@ -21,7 +21,7 @@
 #define RPL_UDP_SOCKET_H_INCLUDED_
 
 /* RPL headers. */
-#include <rpl/config.h>
+#include <rpl/platform.h>
 #include <rpl/types.h>
 #include <rpl/network/address.h>
 

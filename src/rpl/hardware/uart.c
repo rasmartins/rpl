@@ -21,7 +21,6 @@
 #include <stdlib.h>
 
 // RPL headers.
-#include <rpl/config.h>
 #include <rpl/platform.h>
 #include <rpl/hardware/uart.h>
 
