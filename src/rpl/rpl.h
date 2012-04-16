@@ -25,6 +25,7 @@
 #include <rpl/types.h>
 #include <rpl/network/udp_socket.h>
 #include <rpl/network/tcp_socket.h>
+#include <rpl/dll.h>
 
 /**
  * @defgroup INIT Initialization

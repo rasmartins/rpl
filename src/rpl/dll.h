@@ -26,6 +26,7 @@
 
 /* RPL headers. */
 #include <rpl/platform.h>
+#include <rpl/types.h>
 
 /** Dynamic-link Library object. */
 typedef struct rpl_dll* rpl_dll_t;
@@ -36,7 +37,7 @@ rpl_dll_new(void);
 void
 rpl_dll_free(rpl_dll_t* dll);
 
-void
+rpl_bool_t
 rpl_dll_open(rpl_dll_t dll, const char* file);
 
 void

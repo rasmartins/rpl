@@ -11,7 +11,7 @@ check_symbol_exists(RPL_OS_LINUX "rpl/platform.h" RPL_OS_LINUX)
 check_symbol_exists(RPL_OS_WINDOWS "rpl/platform.h" RPL_OS_WINDOWS)
 
 if (RPL_OS_LINUX)
-  set(RPL_LIBS pthread rt)
+  set(RPL_LIBS pthread rt dl)
 elseif(RPL_OS_WINDOWS)
   set(RPL_LIBS wsock32 ws2_32)
 endif()
@@ -24,6 +24,9 @@ target_link_libraries(test_platform rpl ${RPL_LIBS})
 
 add_executable(test_error test/test_error.c)
 target_link_libraries(test_error rpl ${RPL_LIBS})
+
+add_executable(test_dll test/test_dll.c)
+target_link_libraries(test_dll rpl ${RPL_LIBS})
 
 add_executable(test_udp_socket test/test_udp_socket.c)
 target_link_libraries(test_udp_socket rpl ${RPL_LIBS})

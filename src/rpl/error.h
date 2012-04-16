@@ -25,6 +25,8 @@
 
 extern rpl_tls_key_t rpl_error_key;
 
+#define RPL_ERROR_NO_CODE 2147483647
+
 void
 rpl_error_init(void);
 
@@ -43,7 +45,16 @@ rpl_error_get(void);
 void
 rpl_error_set(int error);
 
+void
+rpl_error_clear(void);
+
+void
+rpl_error_set_message(const char* message);
+
 const char*
 rpl_error_translate(int error);
+
+const char*
+rpl_error_translate_last(void);
 
 #endif

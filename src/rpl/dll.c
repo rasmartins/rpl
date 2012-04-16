@@ -23,6 +23,7 @@
 
 /* RPL headers. */
 #include <rpl/platform.h>
+#include <rpl/error.h>
 #include <rpl/dll.h>
 
 /* Platform headers. */
@@ -58,16 +59,28 @@ rpl_dll_free(rpl_dll_t* dll)
   *dll = NULL;
 }
 
-void
+rpl_bool_t
 rpl_dll_open(rpl_dll_t dll, const char* file)
 {
   rpl_dll_close(dll);
 
 #if defined(RPL_OS_WINDOWS)
   dll->handle = LoadLibrary(file);
+  if (dll->handle != NULL)
+    return RPL_TRUE;
+
+  rpl_error_set(GetLastError());
+
 #elif defined(RPL_OS_UNIX)
   dll->handle = dlopen(file, RTLD_NOW);
+  if (dll->handle != NULL)
+    return RPL_TRUE;
+
+  rpl_error_set(RPL_ERROR_NO_CODE);
+  rpl_error_set_message(dlerror());
 #endif
+
+  return RPL_FALSE;
 }
 
 void
@@ -104,5 +117,7 @@ rpl_dll_get(rpl_dll_t dll, const char* symbol_name)
   symbol = dlsym(dll->handle, symbol_name);
 
 #endif
+
+  return symbol;
 }
 

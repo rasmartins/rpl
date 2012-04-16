@@ -91,6 +91,20 @@ rpl_error_set(int error)
   e->code = error;
 }
 
+void
+rpl_error_clear(void)
+{
+  struct rpl_error* e = rpl_tls_key_get_value(rpl_error_key);
+  e->code = 0;
+}
+
+void
+rpl_error_set_message(const char* message)
+{
+  struct rpl_error* e = rpl_tls_key_get_value(rpl_error_key);
+  strncpy(e->message, message, MAX_MESSAGE_SIZE);
+}
+
 const char*
 rpl_error_translate(int error)
 {
@@ -108,14 +122,23 @@ rpl_error_translate(int error)
   struct rpl_error* e = rpl_tls_key_get_value(rpl_error_key);
 
 #if defined(RPL_OS_UNIX)
+  if (e->code == RPL_ERROR_NO_CODE)
+    return e->message;
+
   if (strerror_r(error, e->message, MAX_MESSAGE_SIZE) == 0)
     return e->message;
 
 #elif defined(RPL_OS_WINDOWS)
-  WORD lang = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
-  DWORD size = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, "%0",
-                             error, lang, e->message, MAX_MESSAGE_SIZE,
-                             NULL);
+  WORD lang = 0;
+  DWORD size = 0;
+
+  if (e->code == RPL_ERROR_NO_CODE)
+    return e->message;
+
+  lang = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
+  size = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, "%0",
+                       error, lang, e->message, MAX_MESSAGE_SIZE,
+                       NULL);
   if (size > 0)
   {
       for (--size; size >= 0; --size)
@@ -132,3 +155,9 @@ rpl_error_translate(int error)
   return "unable to translate error";
 }
 
+const char*
+rpl_error_translate_last(void)
+{
+  struct rpl_error* e = rpl_tls_key_get_value(rpl_error_key);
+  return rpl_error_translate(e->code);
+}
