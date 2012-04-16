@@ -40,7 +40,7 @@ rpl_dll_free(rpl_dll_t* dll);
 rpl_bool_t
 rpl_dll_open(rpl_dll_t dll, const char* file);
 
-void
+rpl_bool_t
 rpl_dll_close(rpl_dll_t dll);
 
 void*

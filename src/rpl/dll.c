@@ -29,18 +29,22 @@
 /* Platform headers. */
 #if defined(RPL_OS_UNIX)
 #  include <dlfcn.h>
-#  define GET_LAST_ERROR dlerror()
+#  define SET_ERROR do { rpl_error_set_message(dlerror()); } while (0)
+
 #elif defined(RPL_OS_WINDOWS)
 #  include <windows.h>
-#  define GET_LAST_ERROR Error::getLastMessage()
+#  define SET_ERROR do { rpl_error_set(GetLastError()); } while (0)
+
 #endif
 
 struct rpl_dll
 {
 #if defined(RPL_OS_UNIX)
   void* handle;
+
 #elif defined(RPL_OS_WINDOWS)
   HMODULE handle;
+
 #endif
 };
 
@@ -69,40 +73,44 @@ rpl_dll_open(rpl_dll_t dll, const char* file)
   if (dll->handle != NULL)
     return RPL_TRUE;
 
-  rpl_error_set(GetLastError());
-
 #elif defined(RPL_OS_UNIX)
   dll->handle = dlopen(file, RTLD_NOW);
   if (dll->handle != NULL)
     return RPL_TRUE;
 
-  rpl_error_set(RPL_ERROR_NO_CODE);
-  rpl_error_set_message(dlerror());
 #endif
 
+  SET_ERROR;
   return RPL_FALSE;
 }
 
-void
+rpl_bool_t
 rpl_dll_close(rpl_dll_t dll)
 {
-  int rv = 0;
-
 #if defined(RPL_OS_WINDOWS)
-  if (dll->handle != NULL)
+  if (dll->handle == NULL)
+    return RPL_TRUE;
+
+  if (FreeLibrary(dll->handle) != 0)
     {
-      rv = FreeLibrary(dll->handle);
       dll->handle = NULL;
+      return RPL_TRUE;
     }
 
 #elif defined(RPL_OS_UNIX)
-  if (dll->handle != 0)
+  if (dll->handle == 0)
+    return RPL_TRUE;
+
+  if (dlclose(dll->handle) == 0)
     {
-      rv = dlclose(dll->handle);
       dll->handle = 0;
+      return RPL_TRUE;
     }
 
 #endif
+
+    SET_ERROR;
+    return RPL_FALSE;
 }
 
 void*
@@ -118,6 +126,8 @@ rpl_dll_get(rpl_dll_t dll, const char* symbol_name)
 
 #endif
 
+  if (symbol == NULL)
+    SET_ERROR;
+
   return symbol;
 }
-

@@ -102,6 +102,7 @@ void
 rpl_error_set_message(const char* message)
 {
   struct rpl_error* e = rpl_tls_key_get_value(rpl_error_key);
+  e->code = RPL_ERROR_NO_CODE;
   strncpy(e->message, message, MAX_MESSAGE_SIZE);
 }
 

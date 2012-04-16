@@ -23,8 +23,9 @@
 /* RPL headers. */
 #include <rpl/concurrency/tls.h>
 
-extern rpl_tls_key_t rpl_error_key;
-
+/**
+ * Code for errors without a defined code.
+ */
 #define RPL_ERROR_NO_CODE 2147483647
 
 void
