@@ -16,7 +16,7 @@ elseif(RPL_OS_WINDOWS)
   set(RPL_LIBS ws2_32)
 endif()
 
-file(GLOB_RECURSE RPL_SRCS src/*.c)
+file(GLOB_RECURSE RPL_SRCS src/*.c src/*.h)
 add_library(rpl ${RPL_SRCS})
 
 add_executable(test_platform test/test_platform.c)
