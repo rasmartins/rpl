@@ -112,7 +112,6 @@ rpl_error_translate(int error)
     return e->message;
 
 #elif defined(RPL_OS_WINDOWS)
-  char* ptr = e->message;
   WORD lang = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
   DWORD size = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, "%0",
                              error, lang, e->message, MAX_MESSAGE_SIZE,
@@ -121,9 +120,9 @@ rpl_error_translate(int error)
   {
       for (--size; size >= 0; --size)
         {
-          if (ptr[size] != '\r' && ptr[size] != '\n' && ptr[size] != '.')
+          if (e->message[size] != '\r' && e->message[size] != '\n' && e->message[size] != '.')
             break;
-          ptr[size] = '\0';
+          e->message[size] = '\0';
         }
 
       return e->message;
