@@ -24,37 +24,72 @@
 #include <rpl/concurrency/tls.h>
 
 /**
- * Code for errors without a defined code.
+ * Errors without a defined code.
  */
 #define RPL_ERROR_NO_CODE 2147483647
 
+/**
+ * Initialize error reporting infrastructure.
+ */
 void
 rpl_error_init(void);
 
+/**
+ * Free error reporting infrastructure.
+ */
 void
 rpl_error_exit(void);
 
+/**
+ * Initialize thread specific error reporting infrastructure.
+ */
 void
 rpl_error_thread_init(void);
 
+/**
+ * Free thread specific error reporting infrastructure.
+ */
 void
 rpl_error_thread_exit(void);
 
+/**
+ * Retrieve code of last error.
+ */
 int
 rpl_error_get(void);
 
+/**
+ * Set code of last error.
+ * @param error error code.
+ */
 void
 rpl_error_set(int error);
 
+/**
+ * Clear error code.
+ */
 void
 rpl_error_clear(void);
 
+/**
+ * Set last error message.
+ * @param message human-readable error message.
+ */
 void
 rpl_error_set_message(const char* message);
 
+/**
+ * Translate error code to human-readable message.
+ * @param error error code.
+ * @return human-readable message.
+ */
 const char*
 rpl_error_translate(int error);
 
+/**
+ * Translate last error code to human-readable message.
+ * @return human-readable message.
+ */
 const char*
 rpl_error_translate_last(void);
 
