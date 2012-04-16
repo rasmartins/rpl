@@ -13,7 +13,7 @@ check_symbol_exists(RPL_OS_WINDOWS "rpl/platform.h" RPL_OS_WINDOWS)
 if (RPL_OS_LINUX)
   set(RPL_LIBS pthread rt)
 elseif(RPL_OS_WINDOWS)
-  set(RPL_LIBS ws2_32)
+  set(RPL_LIBS wsock32 ws2_32)
 endif()
 
 file(GLOB_RECURSE RPL_SRCS src/*.c src/*.h)
@@ -21,6 +21,9 @@ add_library(rpl ${RPL_SRCS})
 
 add_executable(test_platform test/test_platform.c)
 target_link_libraries(test_platform rpl ${RPL_LIBS})
+
+add_executable(test_error test/test_error.c)
+target_link_libraries(test_error rpl ${RPL_LIBS})
 
 add_executable(test_udp_socket test/test_udp_socket.c)
 target_link_libraries(test_udp_socket rpl ${RPL_LIBS})

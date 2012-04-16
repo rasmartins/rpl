@@ -27,7 +27,6 @@
 
 /* Microsoft Windows headers. */
 #if defined(RPL_OS_WINDOWS)
-#  include <windows.h>
 #  include <winsock2.h>
 #  include <ws2tcpip.h>
 #endif
@@ -70,14 +69,16 @@ rpl_udp_socket_free(rpl_udp_socket_t sock)
 void
 rpl_udp_socket_open(rpl_udp_socket_t sock)
 {
-  sock->handle = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-  if (sock->handle == INVALID_SOCKET)
-    return;
+#if defined(RPL_OS_WINDOWS)
+    DWORD t = 0;
+    BOOL b = FALSE;
+#endif
+    
+    sock->handle = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if (sock->handle == INVALID_SOCKET)
+        return;
   
 #if defined(RPL_OS_WINDOWS)
-  DWORD t = 0;
-  BOOL b = FALSE;
-  
 #  if defined(SIO_UDP_CONNRESET)
   if (WSAIoctl(sock->handle, SIO_UDP_CONNRESET, &b, sizeof(b), 0, 0, &tmp, 0, 0) == SOCKET_ERROR)
   {

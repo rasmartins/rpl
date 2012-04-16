@@ -1,13 +1,16 @@
 #include <rpl/rpl.h>
 
-char memory[1024 * 1024];
-
 int
 main(void)
 {
-  rpl_init(memory, sizeof(memory));
-  rpl_udp_socket_t udp = rpl_udp_socket_new();
-  rpl_udp_socket_free(udp);
+    rpl_udp_socket_t sock = NULL;
+
+    rpl_init(NULL, 0);
+    
+    sock = rpl_udp_socket_new();
+    rpl_udp_socket_free(sock);
+
+    rpl_exit();
 
   return 0;
 }

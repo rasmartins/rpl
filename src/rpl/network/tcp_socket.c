@@ -123,16 +123,17 @@ rpl_tcp_socket_accept(rpl_tcp_socket_t sock, rpl_address_t* addr)
 
 }
 
-ssize_t
-rpl_tcp_socket_write(rpl_tcp_socket_t sock, const char* data, size_t data_size)
+rpl_ssize_t
+rpl_tcp_socket_write(rpl_tcp_socket_t sock, const char* data, rpl_size_t data_size)
 {
   int flags = 0;
+  rpl_ssize_t rv = 0;
 
 #if defined(MSG_NOSIGNAL)
   flags = MSG_NOSIGNAL;
 #endif
 
-  ssize_t rv = send(sock->handle, data, data_size, flags);
+  rv = send(sock->handle, data, data_size, flags);
   if (rv == -1)
   {
     if (errno == EPIPE)
@@ -144,10 +145,10 @@ rpl_tcp_socket_write(rpl_tcp_socket_t sock, const char* data, size_t data_size)
   return rv;
 }
 
-ssize_t
-rpl_tcp_socket_read(rpl_tcp_socket_t sock, char* data, size_t data_size)
+rpl_ssize_t
+rpl_tcp_socket_read(rpl_tcp_socket_t sock, char* data, rpl_size_t data_size)
 {
-  ssize_t rv = recv(sock->handle, data, data_size, 0);
+  rpl_ssize_t rv = recv(sock->handle, data, data_size, 0);
   if (rv == -1)
   {
     if (errno == ECONNRESET)

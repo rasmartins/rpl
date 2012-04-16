@@ -27,6 +27,9 @@
 
 /* Microsoft Windows headers. */
 #if defined(_WIN32)
+#  ifndef WIN32_LEAN_AND_MEAN
+#    define WIN32_LEAN_AND_MEAN
+#  endif
 #  include <windows.h>
 #endif
 
@@ -258,7 +261,20 @@
 #  define RPL_CPU_UNKNOWN    1
 #endif
 
-#define RPL_SYM
+/* Shared library symbols. */
+#if defined(RPL_OS_WINDOWS) && defined(RPL_SHARED)
+#  define RPL_SYM_EXPORT __declspec(dllexport)
+#  define RPL_SYM_IMPORT __declspec(dllimport)
+#else
+#  define RPL_SYM_EXPORT
+#  define RPL_SYM_IMPORT
+#endif
+
+#if defined(RPL_SYM_EXPORT)
+#  define RPL_SYM RPL_SYM_EXPORT
+#else
+#  define RPL_SYM RPL_SYM_IMPORT
+#endif
 
 /**
  * Retrieve operating system name.

@@ -64,6 +64,8 @@ rpl_libc_get_name(void)
   "glibc";
 #elif defined(RPL_LIBC_MINGW)
   "mingw";
+#elif defined(RPL_LIBC_MICROSOFT)
+  "msvc";
 #else
   "unknown";
 #endif
@@ -75,6 +77,8 @@ rpl_cc_get_name(void)
   return
 #if defined(RPL_CC_GNU)
   "gcc";
+#elif defined(RPL_CC_MICROSOFT)
+  "msvc";
 #else
   "unknown";
 #endif

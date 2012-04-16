@@ -61,10 +61,10 @@ rpl_tcp_socket_listen(rpl_tcp_socket_t socket, unsigned backlog);
 RPL_SYM rpl_tcp_socket_t
 rpl_tcp_socket_accept(rpl_tcp_socket_t socket, rpl_address_t* addr);
 
-RPL_SYM ssize_t
-rpl_tcp_socket_write(rpl_tcp_socket_t socket, const char* data, size_t data_size);
+RPL_SYM rpl_ssize_t
+rpl_tcp_socket_write(rpl_tcp_socket_t socket, const char* data, rpl_size_t data_size);
 
-RPL_SYM ssize_t
-rpl_tcp_socket_read(rpl_tcp_socket_t socket, char* data, size_t data_size);
+RPL_SYM rpl_ssize_t
+rpl_tcp_socket_read(rpl_tcp_socket_t socket, char* data, rpl_size_t data_size);
 
 #endif

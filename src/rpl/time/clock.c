@@ -76,8 +76,8 @@ rpl_clock_get_monotonic(void)
   QueryPerformanceCounter(&val);
   fprintf(stderr, "%lld\n", val.QuadPart);
 
-  LARGE_INTEGER frq;
-  QueryPerformanceFrequency(&frq);
+//  LARGE_INTEGER frq;
+  //QueryPerformanceFrequency(&frq);
 
   /* if (frq.QuadPart < 1000000) */
   /*   frq.QuadPart *=  */

@@ -58,7 +58,7 @@ rpl_delay_nsec(rpl_uint64_t nanoseconds)
 #elif defined(RPL_OS_WINDOWS)
   HANDLE t = CreateWaitableTimer(0, TRUE, 0);
   LARGE_INTEGER dl;
-  dl.QuadPart = (uint64_t)nanoseconds / 100;
+  dl.QuadPart = (rpl_uint64_t)nanoseconds / 100;
   // Negative value means relative time.
   dl.QuadPart *= -1;
   SetWaitableTimer(t, &dl, 0, 0, 0, 0);

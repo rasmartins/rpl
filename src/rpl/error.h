@@ -43,4 +43,7 @@ rpl_error_get(void);
 void
 rpl_error_set(int error);
 
+const char*
+rpl_error_translate(int error);
+
 #endif

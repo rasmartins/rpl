@@ -1,124 +1,163 @@
-/*--------------------------------------------------------------------+
- | Copyright (C) 2012 Ricardo Martins                                 |
- +--------------------------------------------------------------------+
- | This library is free software; you can redistribute it and/or      |
- | modify it under the terms of the GNU Lesser General Public License |
- | as published by the Free Software Foundation; either version 2.1   |
- | of the License, or (at your option) any later version.             |
- |                                                                    |
- | This library is distributed in the hope that it will be useful,    |
- | but WITHOUT ANY WARRANTY; without even the implied warranty of     |
- | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  |
- | Lesser General Public License for more details.                    |
- |                                                                    |
- | You should have received a copy of the GNU Lesser General Public   |
- | License along with this library; if not, write to the Free         |
- | Software Foundation, Inc., 51 Franklin Street, Fifth Floor,        |
- | Boston, MA 02110-1301 USA                                          |
- ---------------------------------------------------------------------*/
+/*------------------------------------------------------------------*\
+| Copyright (C) 2012 Ricardo Martins                                 |
++--------------------------------------------------------------------+
+| This library is free software; you can redistribute it and/or      |
+| modify it under the terms of the GNU Lesser General Public License |
+| as published by the Free Software Foundation; either version 2.1   |
+| of the License, or (at your option) any later version.             |
+|                                                                    |
+| This library is distributed in the hope that it will be useful,    |
+| but WITHOUT ANY WARRANTY; without even the implied warranty of     |
+| MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  |
+| Lesser General Public License for more details.                    |
+|                                                                    |
+| You should have received a copy of the GNU Lesser General Public   |
+| License along with this library; if not, write to the Free         |
+| Software Foundation, Inc., 51 Franklin Street, Fifth Floor,        |
+| Boston, MA 02110-1301 USA                                          |
+\*------------------------------------------------------------------*/
 
-// ISO C99 headers.
+// ISO C headers.
 #include <stdlib.h>
+#include <string.h>
 
 // RPL headers.
 #include <rpl/platform.h>
+#include <rpl/streams/handle.h>
 #include <rpl/hardware/uart.h>
 
 // POSIX headers.
 #if defined(RPL_OS_UNIX)
 #  include <unistd.h>
 #  include <termios.h>
+#  include <sys/types.h>
+#  include <sys/stat.h>
+#  include <fcntl.h>
 #endif
 
-struct rpl_uart
-{
-#if defined(RPL_OS_UNIX)
-  int handle;
-  struct termios options;
+/* Implementation's UID. */
+#define IMPL_UID 0xe161a1a5U
 
+/* Implementation's cast. */
+#define IMPL_GET(handle) ((struct impl*)handle->impl_data)
+
+/* Implementation's data structure. */
+struct impl
+{
+  char* device;
+
+#if defined(RPL_OS_UNIX)
+  int fd;
+  struct termios options;
 #elif defined(RPL_OS_WINDOWS)
-  HANDLE handle;
+  HANDLE fd;
   DCB options;
 #endif
 };
 
-rpl_uart_t
-rpl_uart_new(void)
+static void
+uart_free(rpl_handle_t handle)
 {
-  rpl_uart_t rpl_uart = calloc(1, sizeof(struct rpl_uart));
-  return rpl_uart;
+//  if (handle->impl_uid != IMPL_UID)
+//    return RPL_FALSE;
+
+  free(IMPL_GET(handle)->device);
+  free(handle->impl_data);
+  handle->impl_data = NULL;
 }
 
-void
-rpl_uart_free(rpl_uart_t* rpl_uart)
+static rpl_ssize_t
+uart_read(rpl_handle_t handle, char* buffer, rpl_ssize_t buffer_size)
 {
-  if (rpl_uart == NULL)
-    return;
+  if (handle->impl_uid != IMPL_UID)
+    return RPL_FALSE;
 
-  if (*rpl_uart != NULL)
-  {
-    free(*rpl_uart);
-    *rpl_uart = NULL;
-  }
+
+  return -1;
 }
 
-void
-rpl_uart_open(rpl_uart_t rpl_uart, const char* dev)
+static rpl_ssize_t
+uart_write(rpl_handle_t handle, const char* buffer, rpl_ssize_t buffer_size)
 {
+  if (handle->impl_uid != IMPL_UID)
+    return RPL_FALSE;
+
 #if defined(RPL_OS_UNIX)
-  rpl_uart->options.c_iflag &= ~(BRKINT | ICRNL | INLCR | PARMRK
-                                 | IXOFF | IXON | PARMRK | ISTRIP
-                                 | INPCK);
+  return write(IMPL_GET(handle)->fd, buffer, buffer_size);
+#elif defined(RPL_OS_WINDOWS)
+#endif
 
-  rpl_uart->options.c_oflag &= ~(OPOST | ONLCR | OCRNL | ONOCR
-                                 | ONLRET | OFILL | NLDLY | CRDLY
-                                 | TABDLY | BSDLY | VTDLY | FFDLY);
+  return -1;
+}
 
-  rpl_uart->options.c_lflag &= ~(ECHO | ECHOE | ECHOK | ECHONL
-                                 | ICANON | IEXTEN | ISIG | NOFLSH
-                                 | TOSTOP);
+static void
+uart_open(rpl_handle_t handle)
+{
+//  if (handle->impl_uid != IMPL_UID)
+//    return RPL_FALSE;
+
+#if defined(RPL_OS_UNIX)
+  open(IMPL_GET(handle)->device, O_RDWR);
+#elif defined(RPL_OS_WINDOWS)
 #endif
 }
 
-void
-rpl_uart_close(rpl_uart_t rpl_uart)
+static void
+uart_close(rpl_handle_t handle)
 {
-  rpl_uart_flush(rpl_uart);
+  if (handle->impl_uid != IMPL_UID)
+    return RPL_FALSE;
 
 #if defined(RPL_OS_UNIX)
-  close(rpl_uart->handle);
+  return close(IMPL_GET(handle)->fd);
+#elif defined(RPL_OS_WINDOWS)
 #endif
+
 }
 
-void
-rpl_uart_set_frame_type(rpl_uart_t rpl_uart, rpl_uart_frame_t type)
+static void
+uart_sync(rpl_handle_t handle)
 {
-#if defined(RPL_OS_UNIX)
-  switch (type)
-  {
-    case RPL_UART_FRAME_8N1:
-      rpl_uart->options.c_cflag &= ~(PARENB | PARODD | CSTOPB | CSIZE);
-      rpl_uart->options.c_cflag |= CS8;
-      rpl_uart->options.c_iflag |= IGNPAR;
-      rpl_uart->options.c_iflag &= ~(PARMRK);
-      break;
-
-    case RPL_UART_FRAME_7E1:
-      rpl_uart->options.c_cflag &= ~(PARODD | CSTOPB | CSIZE);
-      rpl_uart->options.c_cflag |= (PARENB | CS7);
-      break;
-
-    case RPL_UART_FRAME_7O1:
-      rpl_uart->options.c_cflag &= ~(CSTOPB | CSIZE);
-      rpl_uart->options.c_cflag |= (PARENB | PARODD | CS7);
-      break;
-  }
-#endif
+  if (handle->impl_uid != IMPL_UID)
+    return RPL_FALSE;
 }
 
-void
-rpl_uart_set_baud_rate(rpl_uart_t rpl_uart, unsigned baud)
+rpl_handle_t
+rpl_uart_new(const char* dev)
 {
+  size_t dev_len = strlen(dev);
+  char* dev_dup = NULL;
+  rpl_handle_t handle = rpl_handle_new();
+
+  handle->impl_uid = IMPL_UID;
+  handle->impl_data = calloc(1, sizeof(struct impl));
+  handle->free = uart_free;
+  handle->open = uart_open;
+  handle->close = uart_close;
+  handle->write = uart_write;
+  handle->read = uart_read;
+
+  dev_dup = calloc(1, strlen(dev) + 1);
+  memcpy(dev_dup, dev, dev_len);
+  IMPL_GET(handle)->device = dev_dup;
+
+  return handle;
+}
+
+rpl_bool_t
+rpl_uart_set_frame_type(rpl_handle_t handle, rpl_uart_frame_t type)
+{
+  if (handle->impl_uid != IMPL_UID)
+    return RPL_FALSE;
+
+}
+
+rpl_bool_t
+rpl_uart_set_baud_rate(rpl_handle_t handle, unsigned baud)
+{
+  if (handle->impl_uid != IMPL_UID)
+    return RPL_FALSE;
+
 #if defined(RPL_OS_UNIX)
   speed_t speed = B4800;
 
@@ -172,3 +211,12 @@ rpl_uart_set_baud_rate(rpl_uart_t rpl_uart, unsigned baud)
   }
 #endif
 }
+
+rpl_bool_t
+rpl_uart_set_flow_control(rpl_handle_t handle, rpl_uart_fctl_t fctl)
+{
+  if (handle->impl_uid != IMPL_UID)
+    return RPL_FALSE;
+
+}
+

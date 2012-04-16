@@ -17,12 +17,32 @@
  | Boston, MA 02110-1301 USA                                          |
  ---------------------------------------------------------------------*/
 
+/* ISO C headers. */
 #include <stddef.h>
+#include <string.h>
 
+/* RPL headers. */
+#include <rpl/platform.h>
 #include <rpl/memory/tlsf.h>
 #include <rpl/error.h>
 
+/* Maximum size of an error message. */
+#if defined(MAX_MESSAGE_SIZE)
+#  undef MAX_MESSAGE_SIZE
+#endif
+#define MAX_MESSAGE_SIZE 1024
+
+/* TLS Error Key. */
 rpl_tls_key_t rpl_error_key;
+
+/* Error data-structure. */
+struct rpl_error
+{
+  /* Error code. */
+  int code;
+  /* Human-readable error message. */
+  char message[MAX_MESSAGE_SIZE + 1];
+};
 
 void
 rpl_error_init(void)
@@ -45,7 +65,7 @@ rpl_error_free(void)
 void
 rpl_error_thread_init(void)
 {
-  int* e = tlsf_calloc(sizeof(int), 1);
+  struct rpl_error* e = tlsf_calloc(sizeof(struct rpl_error), 1);
   rpl_tls_key_set_value(rpl_error_key, e);
 }
 
@@ -60,13 +80,56 @@ rpl_error_thread_exit(void)
 int
 rpl_error_get(void)
 {
-  int* e = rpl_tls_key_get_value(rpl_error_key);
-  return *e;
+  struct rpl_error* e = rpl_tls_key_get_value(rpl_error_key);
+  return e->code;
 }
 
 void
 rpl_error_set(int error)
 {
-  int* e = rpl_tls_key_get_value(rpl_error_key);
-  *e = error;
+  struct rpl_error* e = rpl_tls_key_get_value(rpl_error_key);
+  e->code = error;
 }
+
+const char*
+rpl_error_translate(int error)
+{
+  /* Use POSIX compliant strerror_r. */
+  #if defined(RPL_LIBC_GNU)
+  #  if defined(_POSIX_C_SOURCE)
+  #    undef _POSIX_C_SOURCE
+  #  endif
+  #  define _POSIX_C_SOURCE 200112L
+  #  if defined(_GNU_SOURCE)
+  #    undef _GNU_SOURCE
+  #  endif
+  #endif
+
+  struct rpl_error* e = rpl_tls_key_get_value(rpl_error_key);
+
+#if defined(RPL_OS_UNIX)
+  if (strerror_r(error, e->message, MAX_MESSAGE_SIZE) == 0)
+    return e->message;
+
+#elif defined(RPL_OS_WINDOWS)
+  char* ptr = e->message;
+  WORD lang = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
+  DWORD size = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, "%0",
+                             error, lang, e->message, MAX_MESSAGE_SIZE,
+                             NULL);
+  if (size > 0)
+  {
+      for (--size; size >= 0; --size)
+        {
+          if (ptr[size] != '\r' && ptr[size] != '\n' && ptr[size] != '.')
+            break;
+          ptr[size] = '\0';
+        }
+
+      return e->message;
+  }
+#endif
+
+  return "unable to translate error";
+}
+

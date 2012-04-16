@@ -21,27 +21,28 @@ thread_func(rpl_thread_t thread)
 int
 main(void)
 {
-  rpl_init(NULL, 0);
+    int i = 0;
+    rpl_thread_t threads[THREADS];
 
-  int i = 0;
-  rpl_thread_t threads[THREADS];
-  for (i = 0; i < THREADS; ++i)
-  {
-    threads[i] = rpl_thread_new();
-    rpl_thread_set_function(threads[i], thread_func);
-    rpl_thread_set_data(threads[i], (void*)i);
-    rpl_thread_start(threads[i]);
-  }
+    rpl_init(NULL, 0);
 
-  rpl_delay(20);
+    for (i = 0; i < THREADS; ++i)
+    {
+        threads[i] = rpl_thread_new();
+        rpl_thread_set_function(threads[i], thread_func);
+        rpl_thread_set_data(threads[i], (void*)i);
+        rpl_thread_start(threads[i]);
+    }
 
-  for (i = 0; i < THREADS; ++i)
-  {
-    rpl_thread_stop_and_join(threads[i]);
-    rpl_thread_free(threads[i]);
-  }
+    rpl_delay(20);
 
-  rpl_exit();
+    for (i = 0; i < THREADS; ++i)
+    {
+        rpl_thread_stop_and_join(threads[i]);
+        rpl_thread_free(threads[i]);
+    }
 
-  return 0;
+    rpl_exit();
+
+    return 0;
 }
