@@ -29,6 +29,10 @@ rpl_string_clone(const char* string)
 {
   size_t len = strlen(string);
   char* clone = tlsf_malloc(len + 1);
-  memcpy(clone, string, len + 1);
+  if (clone != NULL)
+    {
+      memcpy(clone, string, len + 1);
+      clone[len] = '\0';
+    }
   return clone;
 }

@@ -25,6 +25,7 @@
 #include <rpl/platform.h>
 #include <rpl/streams/handle.h>
 #include <rpl/hardware/uart.h>
+#include <rpl/string.h>
 
 // POSIX headers.
 #if defined(RPL_OS_UNIX)
@@ -126,7 +127,6 @@ rpl_handle_t
 rpl_uart_new(const char* dev)
 {
   size_t dev_len = strlen(dev);
-  char* dev_dup = NULL;
   rpl_handle_t handle = rpl_handle_new();
 
   handle->impl_uid = IMPL_UID;
@@ -137,9 +137,7 @@ rpl_uart_new(const char* dev)
   handle->write = uart_write;
   handle->read = uart_read;
 
-  dev_dup = calloc(1, strlen(dev) + 1);
-  memcpy(dev_dup, dev, dev_len);
-  IMPL_GET(handle)->device = dev_dup;
+  IMPL_GET(handle)->device = rpl_string_clone(dev);
 
   return handle;
 }
