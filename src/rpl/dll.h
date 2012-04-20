@@ -28,22 +28,66 @@
 #include <rpl/platform.h>
 #include <rpl/types.h>
 
-/** Dynamic-link Library object. */
+/**
+ * @ingroup DLL
+ * @{
+ * @file dll.h
+ * Dynamic-link Library (DLL) handling.
+ * @example dll.c
+ */
+
+/**
+ * Dynamic-link library (DLL) loader object.
+ */
 typedef struct rpl_dll* rpl_dll_t;
 
+
+/**
+ * Create a new DLL loader object.
+ * @return DLL loader object.
+ */
 rpl_dll_t
 rpl_dll_new(void);
 
+/**
+ * Free DLL loader object.
+ * @param dll pointer to DLL loader object.
+ */
 void
 rpl_dll_free(rpl_dll_t* dll);
 
+/**
+ * Open DLL file.
+ * @param dll DLL loader object.
+ * @param file path to DLL file.
+ * @return RPL_TRUE if the operation succeeded, RPL_FALSE otherwise.
+ * In the latter case the error code/message can be retrieved
+ * using rpl_error_get/rpl_error_translate_last.
+ */
 rpl_bool_t
 rpl_dll_open(rpl_dll_t dll, const char* file);
 
+/**
+ * Close a previously opened DLL file.
+ * @param dll DLL loader object.
+ * @return RPL_TRUE if the operation succeeded, RPL_FALSE otherwise.
+ * In the latter case the error code/message can be retrieved
+ * using rpl_error_get/rpl_error_translate_last.
+ */
 rpl_bool_t
 rpl_dll_close(rpl_dll_t dll);
 
+/**
+ * Retrieve the address of a DLL symbol.
+ * @param dll DLL loader object.
+ * @param symbol name symbol name.
+ * @return address of the symbol if the operation succeeded, NULL otherwise.
+ * In the latter case the error code/message can be retrieved
+ * using rpl_error_get/rpl_error_translate_last.
+ */
 void*
 rpl_dll_get(rpl_dll_t dll, const char* symbol_name);
+
+/** @} */
 
 #endif
