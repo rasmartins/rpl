@@ -27,10 +27,9 @@
 #include <rpl/error.h>
 
 /* Maximum size of an error message. */
-#if defined(MAX_MESSAGE_SIZE)
-#  undef MAX_MESSAGE_SIZE
+#if !defined(MAX_MESSAGE_SIZE)
+#  define MAX_MESSAGE_SIZE 1024
 #endif
-#define MAX_MESSAGE_SIZE 1024
 
 /* TLS Error Key. */
 rpl_tls_key_t rpl_error_key;
@@ -65,7 +64,7 @@ rpl_error_free(void)
 void
 rpl_error_thread_init(void)
 {
-  struct rpl_error* e = tlsf_calloc(sizeof(struct rpl_error), 1);
+  struct rpl_error* e = (struct rpl_error*)tlsf_calloc(sizeof(struct rpl_error), 1);
   rpl_tls_key_set_value(rpl_error_key, e);
 }
 
@@ -80,30 +79,35 @@ rpl_error_thread_exit(void)
 int
 rpl_error_get(void)
 {
-  struct rpl_error* e = rpl_tls_key_get_value(rpl_error_key);
+  struct rpl_error* e = (struct rpl_error*)rpl_tls_key_get_value(rpl_error_key);
   return e->code;
 }
 
 void
 rpl_error_set(int error)
 {
-  struct rpl_error* e = rpl_tls_key_get_value(rpl_error_key);
+  struct rpl_error* e = (struct rpl_error*)rpl_tls_key_get_value(rpl_error_key);
   e->code = error;
 }
 
 void
 rpl_error_clear(void)
 {
-  struct rpl_error* e = rpl_tls_key_get_value(rpl_error_key);
+  struct rpl_error* e = (struct rpl_error*)rpl_tls_key_get_value(rpl_error_key);
   e->code = 0;
 }
 
 void
 rpl_error_set_message(const char* message)
 {
-  struct rpl_error* e = rpl_tls_key_get_value(rpl_error_key);
+  struct rpl_error* e = (struct rpl_error*)rpl_tls_key_get_value(rpl_error_key);
   e->code = RPL_ERROR_NO_CODE;
+
+#if defined(RPL_CC_MICROSOFT)
+  strncpy_s(e->message, MAX_MESSAGE_SIZE, message, _TRUNCATE);
+#else
   strncpy(e->message, message, MAX_MESSAGE_SIZE);
+#endif
 }
 
 const char*
@@ -120,7 +124,7 @@ rpl_error_translate(int error)
   #  endif
   #endif
 
-  struct rpl_error* e = rpl_tls_key_get_value(rpl_error_key);
+  struct rpl_error* e = (struct rpl_error*)rpl_tls_key_get_value(rpl_error_key);
 
 #if defined(RPL_OS_UNIX)
   if (e->code == RPL_ERROR_NO_CODE)
@@ -159,6 +163,6 @@ rpl_error_translate(int error)
 const char*
 rpl_error_translate_last(void)
 {
-  struct rpl_error* e = rpl_tls_key_get_value(rpl_error_key);
+  struct rpl_error* e = (struct rpl_error*)rpl_tls_key_get_value(rpl_error_key);
   return rpl_error_translate(e->code);
 }
