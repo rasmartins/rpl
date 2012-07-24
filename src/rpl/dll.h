@@ -41,19 +41,18 @@
  */
 typedef struct rpl_dll* rpl_dll_t;
 
-
 /**
  * Create a new DLL loader object.
  * @return DLL loader object.
  */
-rpl_dll_t
+RPL_SYM rpl_dll_t
 rpl_dll_new(void);
 
 /**
  * Free DLL loader object.
  * @param dll pointer to DLL loader object.
  */
-void
+RPL_SYM void
 rpl_dll_free(rpl_dll_t* dll);
 
 /**
@@ -64,7 +63,7 @@ rpl_dll_free(rpl_dll_t* dll);
  * In the latter case the error code/message can be retrieved
  * using rpl_error_get/rpl_error_translate_last.
  */
-rpl_bool_t
+RPL_SYM rpl_bool_t
 rpl_dll_open(rpl_dll_t dll, const char* file);
 
 /**
@@ -74,7 +73,7 @@ rpl_dll_open(rpl_dll_t dll, const char* file);
  * In the latter case the error code/message can be retrieved
  * using rpl_error_get/rpl_error_translate_last.
  */
-rpl_bool_t
+RPL_SYM rpl_bool_t
 rpl_dll_close(rpl_dll_t dll);
 
 /**
@@ -85,7 +84,7 @@ rpl_dll_close(rpl_dll_t dll);
  * In the latter case the error code/message can be retrieved
  * using rpl_error_get/rpl_error_translate_last.
  */
-void*
+RPL_SYM void*
 rpl_dll_get(rpl_dll_t dll, const char* symbol_name);
 
 /** @} */

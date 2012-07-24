@@ -51,8 +51,8 @@ rpl_udp_socket_free(rpl_udp_socket_t socket);
 RPL_SYM void
 rpl_udp_socket_free(rpl_udp_socket_t socket);
 
-RPL_SYM void
-rpl_udp_bcast_enable(rpl_udp_socket_t socket, rpl_bool_t enable);
+RPL_SYM rpl_bool_t
+rpl_udp_set_bcast(rpl_udp_socket_t socket, rpl_bool_t enabled);
 
 RPL_SYM void
 rpl_udp_set_mcast_ttl(rpl_udp_socket_t socket, rpl_uint8_t ttl);
